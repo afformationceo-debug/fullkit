@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export const metadata = {
-  title: "대시보드 | Full Kit Admin",
+  title: "대시보드 | WhyKit Admin",
 };
 
 const statusLabels: Record<string, string> = {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Building2, Plus, Phone, Mail, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "거래처 관리 | Full Kit Admin" };
+export const metadata = { title: "거래처 관리 | WhyKit Admin" };
 
 interface ClientsPageProps {
   searchParams: Promise<{ search?: string; page?: string }>;

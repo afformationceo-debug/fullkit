@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, Plus, Clock, MapPin, User, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "미팅 관리 | Full Kit Admin" };
+export const metadata = { title: "미팅 관리 | WhyKit Admin" };
 
 const statusLabels: Record<string, string> = {
   scheduled: "예정",

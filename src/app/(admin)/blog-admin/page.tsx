@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileEdit, Plus, Clock, Eye } from "lucide-react";
 
-export const metadata = { title: "블로그 관리 | Full Kit Admin" };
+export const metadata = { title: "블로그 관리 | WhyKit Admin" };
 
 const statusLabels: Record<string, string> = {
   draft: "초안",

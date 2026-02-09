@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Receipt, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "회계 관리 | Full Kit Admin" };
+export const metadata = { title: "회계 관리 | WhyKit Admin" };
 
 const statusLabels: Record<string, string> = {
   draft: "초안",

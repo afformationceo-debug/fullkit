@@ -30,7 +30,7 @@ export function ProblemSection() {
             variants={fadeInUp}
             className="mt-3 text-3xl md:text-5xl font-bold"
           >
-            <span className="gradient-text">Full Kit</span>
+            <span className="gradient-text">WhyKit</span>
             <span className="text-foreground">이 다 해결해.</span>
           </motion.h2>
         </motion.div>

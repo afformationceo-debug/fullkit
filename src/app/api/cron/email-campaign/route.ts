@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get("authorization");
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       });
     }
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // 1. Fetch recently published blog posts (last 7 days) not yet emailed
     const weekAgo = new Date();
@@ -55,7 +55,7 @@ export async function GET(request: Request) {
     }
 
     // 3. Build email content
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://fullkit.kr";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://whykit.io";
     const postListHtml = recentPosts
       .map(
         (p) =>
@@ -71,7 +71,7 @@ export async function GET(request: Request) {
     const htmlContent = `
       <div style="max-width:600px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
         <div style="padding:32px 24px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px 12px 0 0;">
-          <h1 style="color:#fff;margin:0;font-size:24px;">Full Kit 인사이트</h1>
+          <h1 style="color:#fff;margin:0;font-size:24px;">WhyKit 인사이트</h1>
           <p style="color:#94a3b8;margin:8px 0 0;font-size:14px;">이번 주 새로운 블로그 글을 확인하세요</p>
         </div>
         <div style="padding:24px;background:#fff;border:1px solid #e2e8f0;border-top:none;">
@@ -83,7 +83,7 @@ export async function GET(request: Request) {
           </div>
         </div>
         <div style="padding:16px 24px;text-align:center;color:#94a3b8;font-size:12px;">
-          <p>Full Kit | 홈페이지, 앱, 솔루션, 자동화</p>
+          <p>WhyKit | 홈페이지, 앱, 솔루션, 자동화</p>
           <p><a href="${siteUrl}/unsubscribe" style="color:#94a3b8;">수신거부</a></p>
         </div>
       </div>
@@ -110,10 +110,10 @@ export async function GET(request: Request) {
         body: JSON.stringify({
           personalizations,
           from: {
-            email: process.env.SENDGRID_FROM_EMAIL || "hello@fullkit.kr",
-            name: "Full Kit",
+            email: process.env.SENDGRID_FROM_EMAIL || "hello@whykit.io",
+            name: "WhyKit",
           },
-          subject: `[Full Kit] ${recentPosts[0].title}`,
+          subject: `[WhyKit] ${recentPosts[0].title}`,
           content: [{ type: "text/html", value: htmlContent }],
         }),
       });

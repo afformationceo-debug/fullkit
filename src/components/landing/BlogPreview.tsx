@@ -49,7 +49,7 @@ export function BlogPreview() {
               variants={fadeInUp}
               className="text-sm text-muted-foreground mb-3"
             >
-              Full Kit 인사이트
+              WhyKit 인사이트
             </motion.p>
             <motion.h3
               variants={fadeInUp}

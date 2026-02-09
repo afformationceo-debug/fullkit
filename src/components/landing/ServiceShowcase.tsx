@@ -31,7 +31,7 @@ export function ServiceShowcase() {
             variants={fadeInUp}
             className="text-3xl md:text-5xl font-bold text-foreground"
           >
-            Full Kit이 알아서 만드는 것들
+            WhyKit이 알아서 만드는 것들
           </motion.h3>
 
           <motion.p

@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Full Kit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
-    template: "%s | Full Kit",
+    default: "WhyKit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
+    template: "%s | WhyKit",
   },
   description:
     "홈페이지, 앱, 솔루션, 자동화까지. 상담 한 번이면 됩니다. 해외급 디자인, 투명한 가격, 1년 무상 유지보수.",
@@ -27,25 +27,25 @@ export const metadata: Metadata = {
     "앱 제작 업체",
     "솔루션 개발",
     "업무 자동화",
-    "Full Kit",
-    "풀킷",
+    "WhyKit",
+    "와이킷",
   ],
-  authors: [{ name: "Full Kit" }],
-  creator: "Full Kit",
+  authors: [{ name: "WhyKit" }],
+  creator: "WhyKit",
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://fullkit.kr"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://whykit.io"
   ),
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    siteName: "Full Kit",
-    title: "Full Kit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
+    siteName: "WhyKit",
+    title: "WhyKit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
     description:
       "홈페이지, 앱, 솔루션, 자동화까지. 상담 한 번이면 됩니다. 해외급 디자인, 투명한 가격, 1년 무상 유지보수.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Full Kit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
+    title: "WhyKit | 홈페이지 · 앱 · 솔루션 · 자동화 제작",
     description:
       "홈페이지, 앱, 솔루션, 자동화까지. 상담 한 번이면 됩니다.",
   },
@@ -67,13 +67,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://fullkit.kr";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://whykit.io";
 
   // Organization and Service JSON-LD schemas (static, no user input - safe for inline script)
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Full Kit",
+    name: "WhyKit",
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description:
@@ -89,12 +89,12 @@ export default function RootLayout({
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    provider: { "@type": "Organization", name: "Full Kit" },
+    provider: { "@type": "Organization", name: "WhyKit" },
     serviceType: "Web Development",
     areaServed: { "@type": "Country", name: "KR" },
     hasOfferCatalog: {
       "@type": "OfferCatalog",
-      name: "Full Kit 서비스",
+      name: "WhyKit 서비스",
       itemListElement: [
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "홈페이지 제작" } },
         { "@type": "Offer", itemOffered: { "@type": "Service", name: "앱 개발" } },
@@ -107,10 +107,12 @@ export default function RootLayout({
   return (
     <html lang="ko" className="dark">
       <head>
+        <meta name="google-site-verification" content="J-WiKZMUl14pTkZn67v3FEUy5thprMbfqGD72xyUk6c" />
+        <meta name="naver-site-verification" content="865107f975a926160f13926929ce6545d9f64736" />
         <link
           rel="alternate"
           type="application/rss+xml"
-          title="Full Kit 블로그"
+          title="WhyKit 블로그"
           href="/api/blog/rss"
         />
         {/* JSON-LD structured data - static content only, no user input */}

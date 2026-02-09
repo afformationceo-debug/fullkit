@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Plus, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "피드백 관리 | Full Kit Admin" };
+export const metadata = { title: "피드백 관리 | WhyKit Admin" };
 
 const statusLabels: Record<string, string> = {
   pending: "대기",

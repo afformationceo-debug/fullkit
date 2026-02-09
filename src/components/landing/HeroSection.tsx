@@ -71,7 +71,7 @@ export function HeroSection() {
           variants={blurIn}
           className="text-glow gradient-text text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter"
         >
-          Full Kit
+          WhyKit
         </motion.h1>
 
         <motion.p
@@ -105,7 +105,7 @@ export function HeroSection() {
             className="bg-kakao text-kakao-foreground px-10 h-13 text-base rounded-xl font-semibold hover:bg-kakao/90 transition-all hover:shadow-lg hover:shadow-kakao/20"
           >
             <Link
-              href="https://pf.kakao.com/_fullkit"
+              href="https://pf.kakao.com/_whykit"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -120,7 +120,7 @@ export function HeroSection() {
           animate="visible"
           className="mt-10 flex flex-wrap justify-center gap-3"
         >
-          {["#상상대로", "#다만들어", "#걱정은FullKit이"].map((tag) => (
+          {["#상상대로", "#다만들어", "#걱정은WhyKit이"].map((tag) => (
             <motion.span
               key={tag}
               variants={hashtagItem}

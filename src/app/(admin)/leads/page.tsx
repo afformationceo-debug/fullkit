@@ -15,7 +15,7 @@ import {
 import { LeadFilters } from "./lead-filters";
 
 export const metadata = {
-  title: "리드 관리 | Full Kit Admin",
+  title: "리드 관리 | WhyKit Admin",
 };
 
 const statusLabels: Record<string, string> = {

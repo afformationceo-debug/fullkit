@@ -46,7 +46,7 @@ export function FinalCTA() {
             variants={blurIn}
             className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight text-glow gradient-text"
           >
-            Full Kit이
+            WhyKit이
           </motion.h2>
           <motion.h2
             variants={blurIn}

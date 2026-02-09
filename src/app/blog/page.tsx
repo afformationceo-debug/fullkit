@@ -1,138 +1,201 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { getPublishedBlogPosts, getBlogCategories } from "@/lib/dal/blog";
 
 export const metadata: Metadata = {
   title: "블로그 | 홈페이지 제작, 앱 개발, SEO 인사이트",
   description:
-    "홈페이지 제작, 앱 개발, 솔루션, 자동화에 대한 유용한 정보와 인사이트를 공유합니다. Full Kit 블로그.",
+    "홈페이지 제작, 앱 개발, 솔루션, 자동화에 대한 유용한 정보와 인사이트를 공유합니다. WhyKit 블로그.",
 };
 
-const categories = ["전체", "홈페이지", "앱", "솔루션", "자동화", "인사이트"];
+interface BlogPageProps {
+  searchParams: Promise<{ category?: string; page?: string }>;
+}
 
-// Placeholder data - will be replaced by Supabase fetch
-const placeholderPosts = [
-  {
-    slug: "homepage-cost-guide-2026",
-    title: "2026 홈페이지 제작 비용 총정리 – 업종별·유형별 견적 가이드",
-    excerpt:
-      "홈페이지 제작 비용이 궁금하신가요? 업종별, 유형별 실제 견적 데이터를 바탕으로 합리적인 예산을 잡는 방법을 알려드립니다.",
-    category: "홈페이지",
-    readingTime: 7,
-    publishedAt: "2026-01-15",
-  },
-  {
-    slug: "app-development-process",
-    title: "앱 개발, 어디서부터 시작해야 할까? 초보자를 위한 완벽 가이드",
-    excerpt:
-      "앱 개발을 처음 의뢰하시는 분들을 위해, 기획부터 출시까지 전 과정을 단계별로 설명합니다.",
-    category: "앱",
-    readingTime: 5,
-    publishedAt: "2026-01-20",
-  },
-  {
-    slug: "seo-ranking-tips",
-    title: "구글 상위노출 비법 – 홈페이지 SEO 최적화 7가지 핵심 전략",
-    excerpt:
-      "홈페이지를 만들었는데 검색에 안 나온다면? 구글과 네이버에서 상위노출되기 위한 SEO 핵심 전략을 공유합니다.",
-    category: "인사이트",
-    readingTime: 6,
-    publishedAt: "2026-01-25",
-  },
-  {
-    slug: "hospital-homepage-guide",
-    title: "병원 홈페이지 제작 가이드 – 환자가 신뢰하는 사이트 만들기",
-    excerpt:
-      "병원 홈페이지는 단순한 소개 페이지가 아닙니다. 환자의 신뢰를 얻고 예약 전환율을 높이는 핵심 전략을 공유합니다.",
-    category: "홈페이지",
-    readingTime: 8,
-    publishedAt: "2026-02-01",
-  },
-  {
-    slug: "automation-for-small-business",
-    title: "중소기업 업무 자동화 – 당장 도입할 수 있는 5가지 방법",
-    excerpt:
-      "반복 업무에 시간을 뺏기고 계신가요? 비용 부담 없이 바로 적용 가능한 업무 자동화 방법을 알려드립니다.",
-    category: "자동화",
-    readingTime: 5,
-    publishedAt: "2026-02-05",
-  },
-  {
-    slug: "startup-mvp-development",
-    title: "스타트업 MVP 개발 – 빠르게 검증하고, 효율적으로 성장하기",
-    excerpt:
-      "아이디어를 빠르게 검증하고 싶다면? MVP(최소 기능 제품)로 시작하는 스마트한 개발 전략을 소개합니다.",
-    category: "솔루션",
-    readingTime: 6,
-    publishedAt: "2026-02-08",
-  },
-];
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const params = await searchParams;
+  const category = params.category || "전체";
+  const page = parseInt(params.page || "1", 10);
 
-export default function BlogPage() {
+  const [{ data: posts, count, perPage }, categories] = await Promise.all([
+    getPublishedBlogPosts({ category, page }),
+    getBlogCategories(),
+  ]);
+
+  const totalPages = Math.ceil(count / perPage);
+
+  // Hero post: first post (most recent) when on first page with no filter
+  const heroPost = page === 1 && category === "전체" && posts.length > 0 ? posts[0] : null;
+  const gridPosts = heroPost ? posts.slice(1) : posts;
+
   return (
     <>
       <Header />
-      <main className="pt-24 pb-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Page Header */}
-          <div className="mb-12">
+      <main className="pt-20 pb-16">
+        {/* Hero Section with Featured Post */}
+        {heroPost && heroPost.cover_image_url ? (
+          <section className="relative h-[420px] md:h-[520px] mb-12 overflow-hidden">
+            <Image
+              src={String(heroPost.cover_image_url)}
+              alt={String(heroPost.title)}
+              fill
+              className="object-cover"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 px-4 sm:px-6 lg:px-8 pb-10">
+              <div className="mx-auto max-w-7xl">
+                <span className="inline-block text-xs px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white font-medium mb-3">
+                  {String(heroPost.category)}
+                </span>
+                <h2 className="text-2xl md:text-4xl font-bold text-white leading-tight max-w-3xl mb-3">
+                  <Link href={`/blog/${String(heroPost.slug)}`} className="hover:underline underline-offset-4">
+                    {String(heroPost.title)}
+                  </Link>
+                </h2>
+                <p className="text-white/80 text-sm md:text-base max-w-2xl line-clamp-2 mb-4">
+                  {String(heroPost.excerpt)}
+                </p>
+                <div className="flex items-center gap-3 text-white/60 text-xs">
+                  {heroPost.reading_time_minutes && (
+                    <span>{heroPost.reading_time_minutes as number}분 읽기</span>
+                  )}
+                  {heroPost.published_at && (
+                    <span>{new Date(String(heroPost.published_at)).toLocaleDateString("ko-KR")}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+        ) : (
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-12 pt-4">
             <h1 className="text-3xl md:text-5xl font-bold tracking-tight">블로그</h1>
             <p className="mt-3 text-muted-foreground text-lg">
               홈페이지, 앱, 솔루션, 자동화에 대한 유용한 인사이트
             </p>
           </div>
+        )}
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Title (shown when hero exists) */}
+          {heroPost && (
+            <div className="mb-8">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight">블로그</h1>
+              <p className="mt-2 text-muted-foreground">
+                홈페이지, 앱, 솔루션, 자동화에 대한 유용한 인사이트
+              </p>
+            </div>
+          )}
 
           {/* Category Filter */}
           <div className="flex gap-2 mb-10 overflow-x-auto no-scrollbar pb-2">
             {categories.map((cat) => (
-              <button
+              <Link
                 key={cat}
+                href={cat === "전체" ? "/blog" : `/blog?category=${encodeURIComponent(cat)}`}
                 className={`px-4 py-2 rounded-full text-sm whitespace-nowrap transition-colors ${
-                  cat === "전체"
+                  cat === category
                     ? "bg-foreground text-background"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
               >
                 {cat}
-              </button>
+              </Link>
             ))}
           </div>
 
           {/* Blog Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {placeholderPosts.map((post) => (
-              <article key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group block rounded-2xl border border-border bg-card overflow-hidden hover:border-brand/30 transition-colors"
-                >
-                  <div className="aspect-[16/9] bg-muted relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-brand/20 to-transparent" />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-brand/10 text-brand font-medium">
-                        {post.category}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {post.readingTime}분 읽기
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {post.publishedAt}
-                      </span>
+          {gridPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gridPosts.map((post) => (
+                <article key={String(post.id)}>
+                  <Link
+                    href={`/blog/${String(post.slug)}`}
+                    className="group block rounded-2xl border border-border bg-card overflow-hidden hover:border-brand/30 transition-colors"
+                  >
+                    <div className="aspect-[16/9] bg-muted relative overflow-hidden">
+                      {post.cover_image_url ? (
+                        <Image
+                          src={String(post.cover_image_url)}
+                          alt={String(post.title)}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-brand/20 to-transparent" />
+                      )}
                     </div>
-                    <h2 className="font-semibold leading-snug group-hover:text-brand transition-colors line-clamp-2">
-                      {post.title}
-                    </h2>
-                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                  </div>
+                    <div className="p-5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-brand/10 text-brand font-medium">
+                          {String(post.category)}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {post.reading_time_minutes ? `${post.reading_time_minutes as number}분 읽기` : ""}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {post.published_at
+                            ? new Date(String(post.published_at)).toLocaleDateString("ko-KR")
+                            : ""}
+                        </span>
+                      </div>
+                      <h2 className="font-semibold leading-snug group-hover:text-brand transition-colors line-clamp-2">
+                        {String(post.title)}
+                      </h2>
+                      <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                        {String(post.excerpt)}
+                      </p>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          ) : !heroPost ? (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground text-lg">아직 게시된 글이 없습니다.</p>
+              <p className="text-muted-foreground text-sm mt-2">곧 유용한 콘텐츠가 올라올 예정입니다.</p>
+            </div>
+          ) : null}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-12">
+              {page > 1 && (
+                <Link
+                  href={`/blog?${category !== "전체" ? `category=${encodeURIComponent(category)}&` : ""}page=${page - 1}`}
+                  className="px-4 py-2 rounded-lg border border-border text-sm hover:bg-muted transition-colors"
+                >
+                  이전
                 </Link>
-              </article>
-            ))}
-          </div>
+              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                <Link
+                  key={p}
+                  href={`/blog?${category !== "전체" ? `category=${encodeURIComponent(category)}&` : ""}page=${p}`}
+                  className={`px-4 py-2 rounded-lg text-sm transition-colors ${
+                    p === page
+                      ? "bg-foreground text-background"
+                      : "border border-border hover:bg-muted"
+                  }`}
+                >
+                  {p}
+                </Link>
+              ))}
+              {page < totalPages && (
+                <Link
+                  href={`/blog?${category !== "전체" ? `category=${encodeURIComponent(category)}&` : ""}page=${page + 1}`}
+                  className="px-4 py-2 rounded-lg border border-border text-sm hover:bg-muted transition-colors"
+                >
+                  다음
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </main>
       <Footer />

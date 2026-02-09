@@ -19,7 +19,7 @@ export function IndustryTargeting() {
             variants={fadeInUp}
             className="text-3xl md:text-5xl font-bold tracking-tight"
           >
-            어떤 산업이든, Full Kit이 만들어.
+            어떤 산업이든, WhyKit이 만들어.
           </motion.h3>
           <motion.p
             variants={fadeInUp}

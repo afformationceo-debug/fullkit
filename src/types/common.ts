@@ -18,15 +18,17 @@ export interface BlogPost {
   slug: string;
   excerpt: string;
   content: string;
-  cover_image: string | null;
+  cover_image_url: string | null;
   category: string;
   tags: string[];
   published_at: string | null;
-  reading_time: number;
+  reading_time_minutes: number;
   view_count: number;
   meta_title: string | null;
   meta_description: string | null;
   faq_schema: FaqItem[] | null;
+  primary_keyword: string | null;
+  quality_score: number;
 }
 
 export interface FaqItem {

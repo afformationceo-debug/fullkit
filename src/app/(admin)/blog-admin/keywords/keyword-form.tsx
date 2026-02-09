@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, List } from "lucide-react";
 
 const SERVICE_CATEGORIES = [
   { value: "homepage", label: "홈페이지" },
@@ -16,27 +16,34 @@ const SERVICE_CATEGORIES = [
 export function KeywordForm() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const [bulkMode, setBulkMode] = useState(false);
   const [keyword, setKeyword] = useState("");
+  const [bulkKeywords, setBulkKeywords] = useState("");
   const [secondary, setSecondary] = useState("");
   const [serviceCategory, setServiceCategory] = useState("homepage");
   const [category, setCategory] = useState("인사이트");
   const [targetAudience, setTargetAudience] = useState("");
   const [priority, setPriority] = useState("5");
   const [error, setError] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   function handleSubmit() {
-    if (!keyword.trim()) {
-      setError("키워드를 입력하세요.");
-      return;
-    }
     setError("");
+    setSuccessMsg("");
 
-    startTransition(async () => {
-      const res = await fetch("/api/admin/keywords", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          keyword: keyword.trim(),
+    if (bulkMode) {
+      const lines = bulkKeywords
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
+      if (lines.length === 0) {
+        setError("키워드를 한 줄에 하나씩 입력하세요.");
+        return;
+      }
+
+      startTransition(async () => {
+        const batch = lines.map((kw) => ({
+          keyword: kw,
           secondary_keywords: secondary
             .split(",")
             .map((s) => s.trim())
@@ -45,22 +52,64 @@ export function KeywordForm() {
           category,
           target_audience: targetAudience.trim() || undefined,
           priority: parseInt(priority) || 5,
-        }),
-      });
+        }));
 
-      if (!res.ok) {
-        const data = await res.json();
-        setError(data.error || "등록 실패");
+        const res = await fetch("/api/admin/keywords", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(batch),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          setError(data.error || "등록 실패");
+          return;
+        }
+
+        setSuccessMsg(`${lines.length}개 키워드가 등록되었습니다.`);
+        setBulkKeywords("");
+        setSecondary("");
+        setTargetAudience("");
+        setPriority("5");
+        router.refresh();
+      });
+    } else {
+      if (!keyword.trim()) {
+        setError("키워드를 입력하세요.");
         return;
       }
 
-      // Reset form
-      setKeyword("");
-      setSecondary("");
-      setTargetAudience("");
-      setPriority("5");
-      router.refresh();
-    });
+      startTransition(async () => {
+        const res = await fetch("/api/admin/keywords", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            keyword: keyword.trim(),
+            secondary_keywords: secondary
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean),
+            service_category: serviceCategory,
+            category,
+            target_audience: targetAudience.trim() || undefined,
+            priority: parseInt(priority) || 5,
+          }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json();
+          setError(data.error || "등록 실패");
+          return;
+        }
+
+        setSuccessMsg("키워드가 등록되었습니다.");
+        setKeyword("");
+        setSecondary("");
+        setTargetAudience("");
+        setPriority("5");
+        router.refresh();
+      });
+    }
   }
 
   return (
@@ -70,30 +119,78 @@ export function KeywordForm() {
           {error}
         </div>
       )}
+      {successMsg && (
+        <div className="rounded-lg border border-green-500/20 bg-green-500/10 px-3 py-2 text-sm text-green-500">
+          {successMsg}
+        </div>
+      )}
+
+      <div className="flex items-center gap-2 mb-2">
+        <Button
+          type="button"
+          variant={bulkMode ? "outline" : "default"}
+          size="sm"
+          onClick={() => { setBulkMode(false); setError(""); setSuccessMsg(""); }}
+          className={!bulkMode ? "bg-brand text-brand-foreground hover:bg-brand/90" : ""}
+        >
+          <Plus size={14} className="mr-1" />
+          단일 등록
+        </Button>
+        <Button
+          type="button"
+          variant={bulkMode ? "default" : "outline"}
+          size="sm"
+          onClick={() => { setBulkMode(true); setError(""); setSuccessMsg(""); }}
+          className={bulkMode ? "bg-brand text-brand-foreground hover:bg-brand/90" : ""}
+        >
+          <List size={14} className="mr-1" />
+          일괄 등록
+        </Button>
+      </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div>
-          <label className="block text-xs text-muted-foreground mb-1">
-            메인 키워드 *
-          </label>
-          <Input
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            placeholder="예: 홈페이지 제작 비용"
-            className="text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-xs text-muted-foreground mb-1">
-            보조 키워드 (쉼표 구분)
-          </label>
-          <Input
-            value={secondary}
-            onChange={(e) => setSecondary(e.target.value)}
-            placeholder="웹사이트 제작, 반응형 홈페이지"
-            className="text-sm"
-          />
-        </div>
+        {bulkMode ? (
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-muted-foreground mb-1">
+              키워드 목록 (한 줄에 하나씩) *
+            </label>
+            <textarea
+              value={bulkKeywords}
+              onChange={(e) => setBulkKeywords(e.target.value)}
+              placeholder={"홈페이지 제작 비용\n앱 개발 비용\n쇼핑몰 제작\n반응형 웹사이트"}
+              rows={6}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-y"
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              {bulkKeywords.split("\n").filter((l) => l.trim()).length}개 키워드
+            </p>
+          </div>
+        ) : (
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">
+              메인 키워드 *
+            </label>
+            <Input
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="예: 홈페이지 제작 비용"
+              className="text-sm"
+            />
+          </div>
+        )}
+        {!bulkMode && (
+          <div>
+            <label className="block text-xs text-muted-foreground mb-1">
+              보조 키워드 (쉼표 구분)
+            </label>
+            <Input
+              value={secondary}
+              onChange={(e) => setSecondary(e.target.value)}
+              placeholder="웹사이트 제작, 반응형 홈페이지"
+              className="text-sm"
+            />
+          </div>
+        )}
         <div>
           <label className="block text-xs text-muted-foreground mb-1">
             서비스 카테고리
@@ -163,7 +260,9 @@ export function KeywordForm() {
         ) : (
           <Plus size={14} className="mr-1" />
         )}
-        키워드 등록
+        {bulkMode
+          ? `${bulkKeywords.split("\n").filter((l) => l.trim()).length}개 키워드 등록`
+          : "키워드 등록"}
       </Button>
     </div>
   );

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { FolderKanban, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "프로젝트 관리 | Full Kit Admin" };
+export const metadata = { title: "프로젝트 관리 | WhyKit Admin" };
 
 const statusLabels: Record<string, string> = {
   planning: "기획",

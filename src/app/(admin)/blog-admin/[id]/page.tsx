@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { BlogEditor } from "../blog-editor";
 
-export const metadata = { title: "글 수정 | Full Kit Admin" };
+export const metadata = { title: "글 수정 | WhyKit Admin" };
 
 export default async function BlogEditPage({
   params,

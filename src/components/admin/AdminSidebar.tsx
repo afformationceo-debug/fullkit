@@ -54,7 +54,7 @@ export function AdminSidebar() {
       <div className="flex items-center justify-between h-16 px-4 border-b border-border">
         {!collapsed && (
           <Link href="/dashboard" className="text-lg font-bold">
-            Full Kit
+            WhyKit
           </Link>
         )}
         <button

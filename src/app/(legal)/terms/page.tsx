@@ -16,7 +16,7 @@ export default function TermsPage() {
 
           <div className="prose prose-invert max-w-none prose-p:text-muted-foreground prose-headings:text-foreground">
             <h2 className="text-xl font-bold mt-8 mb-4">제1조 (목적)</h2>
-            <p>이 약관은 Full Kit (이하 &quot;회사&quot;)이 제공하는 서비스의 이용 조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.</p>
+            <p>이 약관은 WhyKit (이하 &quot;회사&quot;)이 제공하는 서비스의 이용 조건 및 절차에 관한 사항을 규정함을 목적으로 합니다.</p>
 
             <h2 className="text-xl font-bold mt-8 mb-4">제2조 (서비스의 내용)</h2>
             <p>회사가 제공하는 서비스는 다음과 같습니다.</p>

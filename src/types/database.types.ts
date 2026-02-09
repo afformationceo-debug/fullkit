@@ -417,7 +417,7 @@ export interface Database {
           slug: string;
           content: string;
           excerpt: string;
-          cover_image: string | null;
+          cover_image_url: string | null;
           category: string;
           tags: string[];
           status: BlogStatus;
@@ -427,8 +427,11 @@ export interface Database {
           author_id: string | null;
           published_at: string | null;
           scheduled_for: string | null;
-          reading_time: number;
+          reading_time_minutes: number;
           view_count: number;
+          primary_keyword: string | null;
+          quality_score: number;
+          keyword_density: number | null;
           created_at: string;
           updated_at: string;
         };
@@ -437,7 +440,7 @@ export interface Database {
           slug: string;
           content: string;
           excerpt: string;
-          cover_image?: string | null;
+          cover_image_url?: string | null;
           category: string;
           tags?: string[];
           status?: BlogStatus;
@@ -447,14 +450,17 @@ export interface Database {
           author_id?: string | null;
           published_at?: string | null;
           scheduled_for?: string | null;
-          reading_time?: number;
+          reading_time_minutes?: number;
+          primary_keyword?: string | null;
+          quality_score?: number;
+          keyword_density?: number | null;
         };
         Update: {
           title?: string;
           slug?: string;
           content?: string;
           excerpt?: string;
-          cover_image?: string | null;
+          cover_image_url?: string | null;
           category?: string;
           tags?: string[];
           status?: BlogStatus;
@@ -463,7 +469,10 @@ export interface Database {
           faq_schema?: Json | null;
           published_at?: string | null;
           scheduled_for?: string | null;
-          reading_time?: number;
+          reading_time_minutes?: number;
+          primary_keyword?: string | null;
+          quality_score?: number;
+          keyword_density?: number | null;
         };
       };
       blog_keywords: {
@@ -474,7 +483,13 @@ export interface Database {
           industry: string | null;
           search_volume: number | null;
           difficulty: number | null;
-          is_used: boolean;
+          used: boolean;
+          secondary_keywords: string[];
+          category: string;
+          target_audience: string | null;
+          priority: number;
+          service_category: string;
+          blog_post_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -483,12 +498,25 @@ export interface Database {
           industry?: string | null;
           search_volume?: number | null;
           difficulty?: number | null;
+          used?: boolean;
+          secondary_keywords?: string[];
+          category?: string;
+          target_audience?: string | null;
+          priority?: number;
+          service_category?: string;
+          blog_post_id?: string | null;
         };
         Update: {
           keyword?: string;
           search_volume?: number | null;
           difficulty?: number | null;
-          is_used?: boolean;
+          used?: boolean;
+          secondary_keywords?: string[];
+          category?: string;
+          target_audience?: string | null;
+          priority?: number;
+          service_category?: string;
+          blog_post_id?: string | null;
         };
       };
       deliverables: {

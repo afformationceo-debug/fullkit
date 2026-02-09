@@ -36,7 +36,7 @@ export async function callClaude(
     },
     body: JSON.stringify({
       model: options?.model || "claude-sonnet-4-5-20250929",
-      max_tokens: options?.maxTokens || 4096,
+      max_tokens: options?.maxTokens || 8192,
       temperature: options?.temperature ?? 0.7,
       system: options?.system || "You are a helpful assistant that responds in JSON format when asked.",
       messages,

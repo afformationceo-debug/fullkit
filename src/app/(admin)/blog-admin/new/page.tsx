@@ -1,6 +1,6 @@
 import { BlogEditor } from "../blog-editor";
 
-export const metadata = { title: "새 글 작성 | Full Kit Admin" };
+export const metadata = { title: "새 글 작성 | WhyKit Admin" };
 
 export default function BlogNewPage() {
   return (

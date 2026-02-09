@@ -21,7 +21,7 @@ export async function generateImage(
       model: options?.model || "dall-e-3",
       prompt,
       n: 1,
-      size: options?.size || "1792x1024",
+      size: options?.size || "1024x1024",
       quality: options?.quality || "standard",
       response_format: "url",
     }),
@@ -36,9 +36,10 @@ export async function generateImage(
   return data.data[0]?.url || "";
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function downloadAndUploadImage(
   imageUrl: string,
-  supabaseClient: ReturnType<typeof import("@supabase/supabase-js").createClient>,
+  supabaseClient: any,
   path: string
 ): Promise<string> {
   // Download image from DALL-E URL

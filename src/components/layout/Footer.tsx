@@ -29,7 +29,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="text-xl font-bold tracking-tight">
-              Full Kit
+              WhyKit
             </Link>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
               홈페이지 · 앱 · 솔루션 · 자동화
@@ -60,10 +60,10 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-muted-foreground">
-            &copy; {new Date().getFullYear()} Full Kit. All rights reserved.
+            &copy; {new Date().getFullYear()} WhyKit. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
-            사업자등록번호: 000-00-00000 | 대표: Full Kit
+            사업자등록번호: 000-00-00000 | 대표: WhyKit
           </p>
         </div>
       </div>

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://fullkit.kr";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://whykit.io";
 
   const staticPages: MetadataRoute.Sitemap = [
     {

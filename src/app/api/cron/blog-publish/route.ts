@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(request: Request) {
   const authHeader = request.headers.get("authorization");
@@ -7,7 +8,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const published: string[] = [];
   const errors: string[] = [];
 
@@ -41,11 +42,24 @@ export async function GET(request: Request) {
       if (error) {
         errors.push(`Failed to publish "${post.title}": ${error.message}`);
       } else {
-        published.push(post.title as string);
+        published.push(String(post.title));
+        // Update linked keyword status to published
+        await supabase
+          .from("blog_keywords")
+          .update({ status: "published" })
+          .eq("blog_post_id", post.id);
       }
     }
 
-    // 3. Ping Google for indexing (best-effort)
+    // 3. Revalidate blog pages so new content appears immediately
+    if (published.length > 0) {
+      revalidatePath("/blog");
+      for (const post of scheduledPosts) {
+        revalidatePath(`/blog/${String(post.slug)}`);
+      }
+    }
+
+    // 4. Ping Google for indexing (best-effort)
     if (published.length > 0 && process.env.NEXT_PUBLIC_SITE_URL) {
       try {
         const sitemapUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/sitemap.xml`;

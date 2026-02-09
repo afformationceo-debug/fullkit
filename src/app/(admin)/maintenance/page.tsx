@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Wrench, Plus, ShieldCheck, Ticket, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "유지보수 관리 | Full Kit Admin" };
+export const metadata = { title: "유지보수 관리 | WhyKit Admin" };
 
 const PAGE_SIZE = 20;
 

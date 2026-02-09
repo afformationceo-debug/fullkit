@@ -90,7 +90,7 @@ function ApplyForm() {
           <Link href="/" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
             <ArrowLeft size={16} /> 돌아가기
           </Link>
-          <span className="text-xl font-bold">Full Kit</span>
+          <span className="text-xl font-bold">WhyKit</span>
           <div className="w-20" />
         </div>
       </div>
@@ -183,7 +183,7 @@ function ApplyForm() {
                   id="company"
                   value={form.company}
                   onChange={(e) => updateForm("company", e.target.value)}
-                  placeholder="Full Kit"
+                  placeholder="WhyKit"
                   className="mt-1.5"
                 />
               </div>
@@ -241,7 +241,7 @@ function ApplyForm() {
             <p className="text-muted-foreground mb-8">마지막으로 하나만 더.</p>
             <div className="space-y-5">
               <div>
-                <Label>Full Kit을 어떻게 알게 되셨나요? (선택)</Label>
+                <Label>WhyKit을 어떻게 알게 되셨나요? (선택)</Label>
                 <RadioGroup
                   value={form.referral_source}
                   onValueChange={(v) => updateForm("referral_source", v)}

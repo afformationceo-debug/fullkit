@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Package, Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { SearchInput } from "@/components/admin/search-input";
 
-export const metadata = { title: "산출물 관리 | Full Kit Admin" };
+export const metadata = { title: "산출물 관리 | WhyKit Admin" };
 
 const typeLabels: Record<string, string> = {
   design: "디자인",
