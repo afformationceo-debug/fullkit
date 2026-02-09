@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Building2,
@@ -10,6 +11,7 @@ import {
   FolderKanban,
   ListChecks,
   Milestone,
+  Pencil,
   Tag,
 } from "lucide-react";
 import { ProjectStatusActions } from "./project-status-actions";
@@ -131,6 +133,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </div>
           <p className="text-sm text-muted-foreground mt-1 font-mono">{project.project_number as string}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/projects/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

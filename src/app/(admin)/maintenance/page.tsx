@@ -63,7 +63,7 @@ export default async function MaintenancePage() {
   try {
     const { data } = await supabase
       .from("tickets")
-      .select("*, clients(company_name)")
+      .select("*, maintenance_contracts(clients(company_name))")
       .order("created_at", { ascending: false });
     tickets = data || [];
   } catch {}
@@ -175,7 +175,7 @@ export default async function MaintenancePage() {
                 </thead>
                 <tbody className="divide-y divide-border">
                   {tickets.map((ticket) => {
-                    const client = ticket.clients as { company_name: string } | null;
+                    const contract = ticket.maintenance_contracts as { clients: { company_name: string } | null } | null;
                     return (
                       <tr key={ticket.id as string} className="hover:bg-accent/30 transition-colors">
                         <td className="p-4">
@@ -189,7 +189,7 @@ export default async function MaintenancePage() {
                           </Link>
                         </td>
                         <td className="p-4 text-muted-foreground">
-                          {client?.company_name || "-"}
+                          {contract?.clients?.company_name || "-"}
                         </td>
                         <td className="p-4">
                           <Badge

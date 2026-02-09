@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Building2,
@@ -12,6 +13,7 @@ import {
   FolderKanban,
   Users,
   MessageSquare,
+  Pencil,
 } from "lucide-react";
 
 function formatDate(date: string) {
@@ -94,6 +96,9 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
           <h1 className="text-2xl font-bold">{client.company_name as string}</h1>
           <p className="text-sm text-muted-foreground mt-1 font-mono">{client.client_number as string}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/clients/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
