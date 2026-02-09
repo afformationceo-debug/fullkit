@@ -1,18 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createProject } from "@/lib/actions/project-actions";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
+interface ClientOption {
+  id: string;
+  company_name: string;
+}
+
 export default function NewProjectPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [clients, setClients] = useState<ClientOption[]>([]);
+
+  useEffect(() => {
+    async function fetchClients() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("clients")
+        .select("id, company_name")
+        .order("company_name");
+      if (data) setClients(data as ClientOption[]);
+    }
+    fetchClients();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -69,8 +88,13 @@ export default function NewProjectPage() {
             </select>
           </div>
           <div>
-            <Label htmlFor="client_id">거래처 ID *</Label>
-            <Input id="client_id" name="client_id" required className="mt-1.5" placeholder="거래처 UUID" />
+            <Label htmlFor="client_id">거래처 *</Label>
+            <select id="client_id" name="client_id" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <option value="">거래처 선택</option>
+              {clients.map((c) => (
+                <option key={c.id} value={c.id}>{c.company_name}</option>
+              ))}
+            </select>
           </div>
         </div>
 

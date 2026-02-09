@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -9,10 +9,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
+interface ProjectOption {
+  id: string;
+  title: string;
+}
+
 export default function NewDeliverablePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [projects, setProjects] = useState<ProjectOption[]>([]);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("projects")
+        .select("id, title")
+        .order("title");
+      if (data) setProjects(data as ProjectOption[]);
+    }
+    fetchProjects();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -59,8 +77,13 @@ export default function NewDeliverablePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="project_id">프로젝트 ID *</Label>
-            <Input id="project_id" name="project_id" required className="mt-1.5" placeholder="프로젝트 UUID" />
+            <Label htmlFor="project_id">프로젝트 *</Label>
+            <select id="project_id" name="project_id" required className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <option value="">프로젝트 선택</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>{p.title}</option>
+              ))}
+            </select>
           </div>
           <div>
             <Label htmlFor="type">유형 *</Label>

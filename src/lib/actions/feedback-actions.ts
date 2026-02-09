@@ -3,6 +3,22 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
+export async function createFeedback(formData: {
+  project_id: string;
+  client_id?: string;
+  title: string;
+  content?: string;
+  rating?: number;
+  category?: string;
+}) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("feedback").insert(formData);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/feedback");
+  return { success: true };
+}
+
 export async function updateFeedbackStatus(id: string, status: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("feedback").update({ status }).eq("id", id);

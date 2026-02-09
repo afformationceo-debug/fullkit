@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MessageSquare, Plus, Star } from "lucide-react";
 
 export const metadata = { title: "피드백 관리 | Full Kit Admin" };
 
@@ -71,9 +72,14 @@ export default async function FeedbackPage({ searchParams }: FeedbackPageProps) 
 
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">피드백 관리</h1>
-        <p className="text-muted-foreground mt-1">고객 피드백을 수집하고 처리합니다.</p>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-bold">피드백 관리</h1>
+          <p className="text-muted-foreground mt-1">고객 피드백을 수집하고 처리합니다.</p>
+        </div>
+        <Button asChild className="bg-brand text-brand-foreground hover:bg-brand/90">
+          <Link href="/feedback/new"><Plus size={16} className="mr-1.5" /> 피드백 등록</Link>
+        </Button>
       </div>
 
       {/* Status filter */}

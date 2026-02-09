@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createInvoice } from "@/lib/actions/invoice-actions";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,13 +16,39 @@ interface LineItem {
   unit_price: number;
 }
 
+interface ClientOption {
+  id: string;
+  company_name: string;
+}
+
+interface ProjectOption {
+  id: string;
+  title: string;
+}
+
 export default function NewInvoicePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [clients, setClients] = useState<ClientOption[]>([]);
+  const [projects, setProjects] = useState<ProjectOption[]>([]);
+  const [selectedClientId, setSelectedClientId] = useState("");
   const [items, setItems] = useState<LineItem[]>([
     { description: "", quantity: 1, unit_price: 0 },
   ]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const supabase = createClient();
+      const [clientRes, projectRes] = await Promise.all([
+        supabase.from("clients").select("id, company_name").order("company_name"),
+        supabase.from("projects").select("id, title").order("title"),
+      ]);
+      if (clientRes.data) setClients(clientRes.data as ClientOption[]);
+      if (projectRes.data) setProjects(projectRes.data as ProjectOption[]);
+    }
+    fetchData();
+  }, []);
 
   function addItem() {
     setItems([...items, { description: "", quantity: 1, unit_price: 0 }]);
@@ -80,6 +107,11 @@ export default function NewInvoicePage() {
     }
   }
 
+  // Filter projects by selected client
+  const filteredProjects = selectedClientId
+    ? projects
+    : projects;
+
   return (
     <div className="max-w-3xl">
       <div className="flex items-center gap-3 mb-6">
@@ -95,12 +127,29 @@ export default function NewInvoicePage() {
       <form onSubmit={handleSubmit} className="space-y-5 rounded-xl border border-border bg-card p-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <Label htmlFor="client_id">거래처 ID *</Label>
-            <Input id="client_id" name="client_id" required className="mt-1.5" placeholder="거래처 UUID" />
+            <Label htmlFor="client_id">거래처 *</Label>
+            <select
+              id="client_id"
+              name="client_id"
+              required
+              className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              value={selectedClientId}
+              onChange={(e) => setSelectedClientId(e.target.value)}
+            >
+              <option value="">거래처 선택</option>
+              {clients.map((c) => (
+                <option key={c.id} value={c.id}>{c.company_name}</option>
+              ))}
+            </select>
           </div>
           <div>
-            <Label htmlFor="project_id">프로젝트 ID</Label>
-            <Input id="project_id" name="project_id" className="mt-1.5" placeholder="프로젝트 UUID (선택)" />
+            <Label htmlFor="project_id">프로젝트</Label>
+            <select id="project_id" name="project_id" className="mt-1.5 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+              <option value="">프로젝트 선택 (선택사항)</option>
+              {filteredProjects.map((p) => (
+                <option key={p.id} value={p.id}>{p.title}</option>
+              ))}
+            </select>
           </div>
           <div>
             <Label htmlFor="due_date">결제 기한 *</Label>
