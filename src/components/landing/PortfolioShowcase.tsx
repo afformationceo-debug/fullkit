@@ -1,11 +1,11 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
   fadeInUp,
   staggerContainerSlow,
-  cardHover,
 } from "@/lib/animations/variants";
 
 const portfolioItems = [
@@ -143,40 +143,126 @@ const portfolioItems = [
   },
 ];
 
-function MockScreen() {
+// Icon components for each mockVariant
+function MockMedical() {
   return (
-    <div className="absolute inset-2.5 sm:inset-3 rounded-lg overflow-hidden bg-white/[0.03] border border-white/[0.06]">
-      {/* Browser chrome */}
-      <div className="flex items-center gap-1 px-2.5 py-1.5 bg-white/[0.04] border-b border-white/[0.04]">
-        <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-        <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-        <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-        <div className="ml-2 h-2.5 w-20 rounded-full bg-white/[0.06]" />
-      </div>
-      {/* Content */}
-      <div className="p-2.5 space-y-1.5">
-        <div className="flex items-center justify-between">
-          <div className="h-2.5 w-12 rounded bg-white/10" />
-          <div className="flex gap-1.5">
-            <div className="h-2 w-6 rounded bg-white/[0.06]" />
-            <div className="h-2 w-6 rounded bg-white/[0.06]" />
-            <div className="h-2 w-6 rounded bg-white/[0.06]" />
-          </div>
-        </div>
-        <div className="h-10 sm:h-14 rounded bg-white/[0.05] flex items-center justify-center">
-          <div className="h-3 w-20 rounded bg-white/10" />
-        </div>
-        <div className="grid grid-cols-3 gap-1">
-          <div className="h-6 sm:h-8 rounded bg-white/[0.04]" />
-          <div className="h-6 sm:h-8 rounded bg-white/[0.04]" />
-          <div className="h-6 sm:h-8 rounded bg-white/[0.04]" />
-        </div>
-        <div className="h-2 w-full rounded bg-white/[0.03]" />
-        <div className="h-2 w-3/4 rounded bg-white/[0.03]" />
+    <div className="flex flex-col items-center gap-2">
+      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg">🏥</div>
+      <div className="flex gap-1.5">
+        <div className="h-1.5 w-8 rounded bg-white/15" />
+        <div className="h-1.5 w-6 rounded bg-white/10" />
       </div>
     </div>
   );
 }
+
+function MockBrand() {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-lg">✨</div>
+      <div className="h-1.5 w-12 rounded bg-white/15" />
+    </div>
+  );
+}
+
+function MockDashboard() {
+  return (
+    <div className="w-full space-y-1.5 px-1">
+      <div className="flex gap-1.5">
+        <div className="h-5 flex-1 rounded bg-white/8" />
+        <div className="h-5 flex-1 rounded bg-white/6" />
+        <div className="h-5 flex-1 rounded bg-white/10" />
+      </div>
+      <div className="h-8 w-full rounded bg-white/5" />
+    </div>
+  );
+}
+
+function MockEditor() {
+  return (
+    <div className="w-full space-y-1 px-1">
+      <div className="h-2 w-3/4 rounded bg-white/15" />
+      <div className="h-1.5 w-full rounded bg-white/8" />
+      <div className="h-1.5 w-5/6 rounded bg-white/6" />
+      <div className="h-1.5 w-2/3 rounded bg-white/8" />
+    </div>
+  );
+}
+
+function MockCards() {
+  return (
+    <div className="grid grid-cols-2 gap-1.5 px-1">
+      <div className="h-8 rounded bg-white/8 flex items-center justify-center"><div className="w-4 h-4 rounded-full bg-white/15"/></div>
+      <div className="h-8 rounded bg-white/6 flex items-center justify-center"><div className="w-4 h-4 rounded-full bg-white/12"/></div>
+    </div>
+  );
+}
+
+function MockChat() {
+  return (
+    <div className="w-full space-y-1.5 px-1">
+      <div className="flex justify-start"><div className="h-3 w-16 rounded-full bg-white/10" /></div>
+      <div className="flex justify-end"><div className="h-3 w-12 rounded-full bg-white/15" /></div>
+      <div className="flex justify-start"><div className="h-3 w-20 rounded-full bg-white/8" /></div>
+    </div>
+  );
+}
+
+function MockCalendar() {
+  return (
+    <div className="grid grid-cols-5 gap-1 px-1">
+      {Array.from({ length: 10 }).map((_, i) => (
+        <div key={i} className={`h-4 rounded ${i === 3 || i === 7 ? "bg-white/20" : "bg-white/6"}`} />
+      ))}
+    </div>
+  );
+}
+
+function MockApp() {
+  return (
+    <div className="flex flex-col items-center gap-1.5">
+      <div className="w-8 h-12 rounded-lg bg-white/10 border border-white/15" />
+      <div className="h-1.5 w-10 rounded bg-white/10" />
+    </div>
+  );
+}
+
+function MockGame() {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="w-6 h-6 rounded bg-white/15 rotate-12" />
+      <div className="w-8 h-8 rounded-lg bg-white/20" />
+      <div className="w-6 h-6 rounded bg-white/10 -rotate-12" />
+    </div>
+  );
+}
+
+function MockBrowser() {
+  return (
+    <div className="w-full space-y-1.5 px-1">
+      <div className="flex items-center gap-1">
+        <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+        <div className="w-1.5 h-1.5 rounded-full bg-white/15" />
+        <div className="w-1.5 h-1.5 rounded-full bg-white/10" />
+        <div className="ml-1 h-2 flex-1 rounded bg-white/8" />
+      </div>
+      <div className="h-6 rounded bg-white/6" />
+    </div>
+  );
+}
+
+const mockComponents: Record<string, () => React.JSX.Element> = {
+  medical: MockMedical,
+  brand: MockBrand,
+  dashboard: MockDashboard,
+  editor: MockEditor,
+  cards: MockCards,
+  chat: MockChat,
+  calendar: MockCalendar,
+  browser: MockBrowser,
+  app: MockApp,
+  game: MockGame,
+};
 
 export function PortfolioShowcase() {
   return (
@@ -219,66 +305,62 @@ export function PortfolioShowcase() {
           viewport={{ once: true, amount: 0.05 }}
           className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          {portfolioItems.map((item) => (
-            <motion.div
-              key={item.id}
-              variants={fadeInUp}
-              initial="rest"
-              whileHover="hover"
-              className={item.colSpan === 2 ? "lg:col-span-2" : ""}
-            >
+          {portfolioItems.map((item) => {
+            const MockComponent = mockComponents[item.mockVariant] || MockBrowser;
+            return (
               <motion.div
-                variants={cardHover}
-                className="group relative overflow-hidden rounded-xl bg-muted cursor-pointer"
-                style={{ aspectRatio: item.colSpan === 2 ? "2/1" : "4/3" }}
+                key={item.id}
+                variants={fadeInUp}
+                className={item.colSpan === 2 ? "lg:col-span-2" : ""}
               >
-                {/* Gradient background */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${item.gradient} transition-transform duration-700 group-hover:scale-110`}
-                />
+                <div className="group relative overflow-hidden rounded-2xl border border-border bg-card hover:border-brand/30 transition-all duration-300 hover:shadow-lg hover:shadow-brand/5">
+                  {/* Visual area */}
+                  <div
+                    className={`relative overflow-hidden bg-gradient-to-br ${item.gradient}`}
+                    style={{ aspectRatio: item.colSpan === 2 ? "3/1" : "16/9" }}
+                  >
+                    {/* Grid pattern */}
+                    <div
+                      className="absolute inset-0 opacity-[0.06]"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+                        backgroundSize: "30px 30px",
+                      }}
+                    />
+                    {/* Mock icon */}
+                    <div className="absolute inset-0 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                      <MockComponent />
+                    </div>
+                    {/* Stats badge */}
+                    <div className="absolute top-3 right-3">
+                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white border border-white/15">
+                        {item.stats}
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Grid pattern */}
-                <div
-                  className="absolute inset-0 opacity-[0.06]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-                    backgroundSize: "30px 30px",
-                  }}
-                />
-
-                {/* Mock screen UI */}
-                <MockScreen />
-
-                {/* Stats badge */}
-                <div className="absolute top-3 right-3 z-10">
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-white/10 backdrop-blur-sm text-white/80 border border-white/10">
-                    {item.stats}
-                  </span>
-                </div>
-
-                {/* Hover overlay with project info */}
-                <div className="absolute inset-0 flex flex-col justify-end bg-black/0 p-5 transition-all duration-300 group-hover:bg-black/60 backdrop-blur-0 group-hover:backdrop-blur-[2px]">
-                  <div className="translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <div className="flex items-center gap-2 text-xs text-white/70">
-                      <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm">
+                  {/* Info area - always visible */}
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-brand/10 text-brand">
                         {item.category}
                       </span>
-                      <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm">
+                      <span className="text-[10px] text-muted-foreground">
                         {item.type}
                       </span>
                     </div>
-                    <h4 className="mt-2 text-lg font-semibold text-white">
+                    <h4 className="font-bold text-foreground group-hover:text-brand transition-colors">
                       {item.title}
                     </h4>
-                    <p className="mt-1 text-sm text-white/80 line-clamp-2">
+                    <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
                       {item.description}
                     </p>
                   </div>
                 </div>
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
 
         {/* Bottom CTA */}

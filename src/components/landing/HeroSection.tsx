@@ -11,8 +11,9 @@ import {
   glowPulseSlow,
   hashtagStagger,
   hashtagItem,
-  blurIn,
 } from "@/lib/animations/variants";
+
+const blurIn = fadeInUp;
 
 const rotatingWords = ["홈페이지", "앱", "솔루션", "자동화", "뭐든지"];
 
@@ -89,32 +90,29 @@ export function HeroSection() {
           WhyKit
         </motion.h1>
 
-        {/* Rotating word - standalone centered line */}
+        {/* Rotating word + tagline on one line */}
         <motion.div
           variants={fadeInUp}
-          className="mt-6 relative h-[1.3em] w-full overflow-hidden"
+          className="mt-6 flex items-center justify-center gap-3"
         >
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={rotatingWords[wordIndex]}
-              initial={{ y: 50, opacity: 0, filter: "blur(12px)", scale: 0.9 }}
-              animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
-              exit={{ y: -50, opacity: 0, filter: "blur(12px)", scale: 0.9 }}
-              transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="absolute inset-0 flex items-center justify-center text-4xl md:text-6xl lg:text-7xl font-bold gradient-text text-glow"
-            >
-              {rotatingWords[wordIndex]}
-            </motion.span>
-          </AnimatePresence>
+          <div className="relative h-[1.2em] w-[4.5em] overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                initial={{ y: 40, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -40, opacity: 0 }}
+                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="absolute inset-0 flex items-center justify-center text-4xl md:text-6xl lg:text-7xl font-bold gradient-text"
+              >
+                {rotatingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+          <span className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground/70">
+            다 만든다.
+          </span>
         </motion.div>
-
-        {/* "다 만든다." tagline */}
-        <motion.p
-          variants={fadeInUp}
-          className="mt-1 text-2xl md:text-3xl lg:text-4xl font-bold text-foreground/70"
-        >
-          다 만든다.
-        </motion.p>
 
         {/* Emotional copy - staggered reveal */}
         <div className="mt-10 space-y-1">
@@ -122,8 +120,8 @@ export function HeroSection() {
             (line, i) => (
               <motion.p
                 key={line}
-                initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{
                   delay: 1.2 + i * 0.35,
                   duration: 0.6,
