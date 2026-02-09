@@ -14,6 +14,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import { MeetingStatusActions } from "./meeting-status-actions";
+import { MeetingDelete } from "./meeting-delete";
 import { FollowUpList } from "./follow-up-list";
 
 const statusLabels: Record<string, string> = {
@@ -166,6 +167,11 @@ export default async function MeetingDetailPage({ params }: MeetingDetailPagePro
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="font-semibold mb-4">상태 관리</h2>
             <MeetingStatusActions meetingId={id} currentStatus={meeting.status as string} />
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <MeetingDelete meetingId={id} />
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import {
   FileText,
 } from "lucide-react";
 import { InvoiceStatusActions } from "./invoice-status-actions";
+import { InvoiceDelete } from "./invoice-delete";
 
 const statusLabels: Record<string, string> = {
   draft: "초안",
@@ -189,6 +190,12 @@ export default async function InvoiceDetailPage({ params }: InvoiceDetailPagePro
                 <span className="text-lg font-bold">{formatCurrency((invoice.total_amount as number) || 0)}</span>
               </div>
             </div>
+          </div>
+
+          {/* Delete */}
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <InvoiceDelete invoiceId={id} />
           </div>
         </div>
       </div>

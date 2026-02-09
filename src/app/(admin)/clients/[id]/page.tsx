@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ClientDelete } from "./client-delete";
 import {
   ArrowLeft,
   Building2,
@@ -231,6 +232,12 @@ export default async function ClientDetailPage({ params }: ClientDetailPageProps
                 ))}
               </div>
             )}
+          </div>
+
+          {/* Delete */}
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <ClientDelete clientId={id} />
           </div>
         </div>
       </div>
