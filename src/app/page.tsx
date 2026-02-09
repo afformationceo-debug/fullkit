@@ -11,8 +11,20 @@ import { ProcessSection } from "@/components/landing/ProcessSection";
 import { TestimonialsCarousel } from "@/components/landing/TestimonialsCarousel";
 import { BlogPreview } from "@/components/landing/BlogPreview";
 import { FinalCTA } from "@/components/landing/FinalCTA";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  // Fetch latest published blog posts for the preview section
+  const supabase = await createClient();
+  const { data: posts } = await supabase
+    .from("blog_posts")
+    .select(
+      "slug, title, excerpt, category, reading_time_minutes, cover_image_url, published_at"
+    )
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(3);
+
   return (
     <>
       <Header />
@@ -25,7 +37,9 @@ export default function Home() {
         <IndustryTargeting />
         <ProcessSection />
         <TestimonialsCarousel />
-        <BlogPreview />
+        <BlogPreview
+          posts={(posts || []) as Array<Record<string, unknown>>}
+        />
         <FinalCTA />
       </main>
       <Footer />

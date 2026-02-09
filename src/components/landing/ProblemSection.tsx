@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import {
   fadeInUp,
   staggerContainer,
@@ -33,6 +34,13 @@ export function ProblemSection() {
             <span className="gradient-text">WhyKit</span>
             <span className="text-foreground">이 다 해결해.</span>
           </motion.h2>
+
+          <motion.p
+            variants={fadeInUp}
+            className="mt-4 text-muted-foreground max-w-lg"
+          >
+            고객이 겪는 불편, 하나하나 해결했습니다.
+          </motion.p>
         </motion.div>
 
         <motion.div
@@ -46,29 +54,47 @@ export function ProblemSection() {
             <motion.div
               key={index}
               variants={scaleIn}
-              className="group relative rounded-2xl border border-border bg-background p-6 transition-all duration-300 hover:border-brand/30 card-glow"
+              className="group relative rounded-2xl border border-border bg-background overflow-hidden transition-all duration-500 hover:border-brand/30 card-glow"
             >
-              {/* Subtle gradient overlay on hover */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand/0 to-brand/0 group-hover:from-brand/[0.02] group-hover:to-transparent transition-all duration-500 pointer-events-none" />
+              {/* Gradient overlay on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-brand/0 to-brand/0 group-hover:from-brand/[0.03] group-hover:to-transparent transition-all duration-500 pointer-events-none" />
 
-              {/* Problem */}
-              <div className="relative flex items-start gap-3">
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-destructive/15 text-destructive text-sm font-bold">
-                  &times;
+              {/* Number badge */}
+              <div className="absolute top-4 right-4">
+                <span className="text-xs font-mono text-muted-foreground/30 font-bold">
+                  {String(index + 1).padStart(2, "0")}
                 </span>
-                <p className="text-muted-foreground leading-relaxed">
-                  &ldquo;{item.problem}&rdquo;
-                </p>
               </div>
 
-              {/* Solution */}
-              <div className="relative mt-4 flex items-start gap-3">
-                <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 text-sm font-bold">
-                  &#10003;
-                </span>
-                <p className="font-semibold text-foreground leading-relaxed">
-                  <span className="text-brand">{item.solution}</span>
-                </p>
+              <div className="relative p-6">
+                {/* Problem */}
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-destructive/15 text-destructive text-sm font-bold">
+                    &times;
+                  </span>
+                  <p className="text-muted-foreground leading-relaxed">
+                    &ldquo;{item.problem}&rdquo;
+                  </p>
+                </div>
+
+                {/* Arrow transition */}
+                <div className="my-3 ml-3 flex items-center gap-2">
+                  <div className="h-px flex-1 bg-gradient-to-r from-border to-transparent" />
+                  <ArrowRight
+                    size={14}
+                    className="text-brand/40 group-hover:text-brand transition-colors duration-300"
+                  />
+                </div>
+
+                {/* Solution */}
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 text-sm font-bold">
+                    &#10003;
+                  </span>
+                  <p className="font-semibold text-foreground leading-relaxed">
+                    <span className="text-brand">{item.solution}</span>
+                  </p>
+                </div>
               </div>
             </motion.div>
           ))}

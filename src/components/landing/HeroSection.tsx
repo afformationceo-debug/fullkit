@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
   fadeInUp,
@@ -13,7 +14,18 @@ import {
   blurIn,
 } from "@/lib/animations/variants";
 
+const rotatingWords = ["홈페이지", "앱", "솔루션", "자동화", "뭐든지"];
+
 export function HeroSection() {
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       {/* Multiple animated gradient orbs for depth */}
@@ -49,6 +61,8 @@ export function HeroSection() {
       <div className="pointer-events-none absolute top-[20%] right-[15%] w-20 h-20 border border-brand/10 rounded-2xl rotate-12 animate-float" />
       <div className="pointer-events-none absolute bottom-[25%] left-[12%] w-14 h-14 border border-brand/8 rounded-xl -rotate-6 animate-float-delayed" />
       <div className="pointer-events-none absolute top-[65%] right-[20%] w-8 h-8 bg-brand/5 rounded-lg rotate-45 animate-float-delayed" />
+      <div className="pointer-events-none absolute top-[30%] left-[8%] w-6 h-6 border border-brand/6 rounded-md rotate-[20deg] animate-float" />
+      <div className="pointer-events-none absolute bottom-[35%] right-[10%] w-12 h-12 border border-brand/5 rounded-xl rotate-[-15deg] animate-float-delayed" />
 
       {/* Subtle grid background */}
       <div
@@ -65,8 +79,9 @@ export function HeroSection() {
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
-        className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto"
+        className="relative z-10 flex flex-col items-center text-center px-6 max-w-5xl mx-auto"
       >
+        {/* Main title */}
         <motion.h1
           variants={blurIn}
           className="text-glow gradient-text text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter"
@@ -74,23 +89,84 @@ export function HeroSection() {
           WhyKit
         </motion.h1>
 
-        <motion.p
-          variants={fadeInUp}
-          className="mt-4 text-lg md:text-xl text-muted-foreground tracking-wide"
-        >
-          홈페이지. 앱. 솔루션. 자동화.
-        </motion.p>
-
-        <motion.p
-          variants={fadeInUp}
-          className="mt-10 text-2xl md:text-3xl lg:text-4xl font-semibold leading-snug text-foreground whitespace-pre-line"
-        >
-          {"걱정하지 마.\n어려운 거 알아.\n그래서 만들었어."}
-        </motion.p>
-
+        {/* Rotating word - standalone centered line */}
         <motion.div
           variants={fadeInUp}
-          className="mt-12 flex flex-col sm:flex-row items-center gap-4"
+          className="mt-6 relative h-[1.3em] w-full overflow-hidden"
+        >
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={rotatingWords[wordIndex]}
+              initial={{ y: 50, opacity: 0, filter: "blur(12px)", scale: 0.9 }}
+              animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
+              exit={{ y: -50, opacity: 0, filter: "blur(12px)", scale: 0.9 }}
+              transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="absolute inset-0 flex items-center justify-center text-4xl md:text-6xl lg:text-7xl font-bold gradient-text text-glow"
+            >
+              {rotatingWords[wordIndex]}
+            </motion.span>
+          </AnimatePresence>
+        </motion.div>
+
+        {/* "다 만든다." tagline */}
+        <motion.p
+          variants={fadeInUp}
+          className="mt-1 text-2xl md:text-3xl lg:text-4xl font-bold text-foreground/70"
+        >
+          다 만든다.
+        </motion.p>
+
+        {/* Emotional copy - staggered reveal */}
+        <div className="mt-10 space-y-1">
+          {["걱정하지 마.", "어려운 거 알아.", "그래서 만들었어."].map(
+            (line, i) => (
+              <motion.p
+                key={line}
+                initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{
+                  delay: 1.2 + i * 0.35,
+                  duration: 0.6,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                }}
+                className={`text-xl md:text-2xl lg:text-3xl font-semibold ${
+                  i === 2 ? "text-foreground" : "text-foreground/60"
+                }`}
+              >
+                {line}
+              </motion.p>
+            )
+          )}
+        </div>
+
+        {/* Stats bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.4, duration: 0.6 }}
+          className="mt-10 flex items-center gap-8 md:gap-12"
+        >
+          {[
+            { number: "300+", label: "프로젝트" },
+            { number: "98%", label: "고객 만족" },
+            { number: "~2주", label: "평균 납기" },
+          ].map((stat, i) => (
+            <div key={stat.label} className="flex flex-col items-center gap-1">
+              <span className="text-lg md:text-2xl font-bold text-foreground">
+                {stat.number}
+              </span>
+              <span className="text-xs text-muted-foreground">{stat.label}</span>
+              {i < 2 && (
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden" />
+              )}
+            </div>
+          ))}
+        </motion.div>
+
+        {/* CTA buttons */}
+        <motion.div
+          variants={fadeInUp}
+          className="mt-10 flex flex-col sm:flex-row items-center gap-4"
         >
           <Button
             asChild
@@ -114,11 +190,12 @@ export function HeroSection() {
           </Button>
         </motion.div>
 
+        {/* Hashtags */}
         <motion.div
           variants={hashtagStagger}
           initial="hidden"
           animate="visible"
-          className="mt-10 flex flex-wrap justify-center gap-3"
+          className="mt-8 flex flex-wrap justify-center gap-3"
         >
           {["#상상대로", "#다만들어", "#걱정은WhyKit이"].map((tag) => (
             <motion.span
@@ -136,7 +213,7 @@ export function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
+        transition={{ delay: 3, duration: 1 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
