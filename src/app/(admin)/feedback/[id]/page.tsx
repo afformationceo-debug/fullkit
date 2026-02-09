@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { FeedbackStatusActions } from "./feedback-status-actions";
 import { FeedbackComments } from "./feedback-comments";
+import { FeedbackDelete } from "./feedback-delete";
 
 const statusLabels: Record<string, string> = {
   pending: "대기",
@@ -175,6 +176,11 @@ export default async function FeedbackDetailPage({ params }: FeedbackDetailPageP
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="font-semibold mb-4">상태 관리</h2>
             <FeedbackStatusActions feedbackId={id} currentStatus={feedback.status as string} />
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <FeedbackDelete feedbackId={id} />
           </div>
         </div>
       </div>

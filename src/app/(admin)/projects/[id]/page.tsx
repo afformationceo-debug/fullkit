@@ -15,6 +15,7 @@ import {
   Tag,
 } from "lucide-react";
 import { ProjectStatusActions } from "./project-status-actions";
+import { ProjectDelete } from "./project-delete";
 
 const statusLabels: Record<string, string> = {
   planning: "기획",
@@ -280,6 +281,11 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <ProjectDelete projectId={id} />
           </div>
         </div>
       </div>

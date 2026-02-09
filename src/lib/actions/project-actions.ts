@@ -74,3 +74,12 @@ export async function deleteTask(taskId: string, projectId: string) {
   revalidatePath(`/projects/${projectId}`);
   return { success: true };
 }
+
+export async function deleteProject(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("projects").delete().eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/projects");
+  return { success: true };
+}

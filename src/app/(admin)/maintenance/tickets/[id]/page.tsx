@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { TicketStatusActions } from "./ticket-status-actions";
 import { TicketComments } from "./ticket-comments";
+import { TicketDelete } from "./ticket-delete";
 
 const statusLabels: Record<string, string> = {
   open: "접수",
@@ -158,6 +159,11 @@ export default async function TicketDetailPage({ params }: TicketDetailPageProps
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="font-semibold mb-4">상태 관리</h2>
             <TicketStatusActions ticketId={id} currentStatus={ticket.status as string} />
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <TicketDelete ticketId={id} />
           </div>
         </div>
       </div>

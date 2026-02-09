@@ -28,6 +28,15 @@ export async function updateFeedbackStatus(id: string, status: string) {
   return { success: true };
 }
 
+export async function deleteFeedback(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("feedback").delete().eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/feedback");
+  return { success: true };
+}
+
 export async function addFeedbackComment(feedbackId: string, content: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

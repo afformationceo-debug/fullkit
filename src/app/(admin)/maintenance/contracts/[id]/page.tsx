@@ -12,6 +12,7 @@ import {
   Ticket,
   FileText,
 } from "lucide-react";
+import { ContractDelete } from "./contract-delete";
 
 const ticketStatusLabels: Record<string, string> = {
   open: "접수",
@@ -178,6 +179,11 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
                 <p className="text-2xl font-bold">{formatCurrency((contract.monthly_fee as number) || 0)}</p>
               </div>
             </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <ContractDelete contractId={id} />
           </div>
         </div>
       </div>

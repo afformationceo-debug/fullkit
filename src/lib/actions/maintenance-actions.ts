@@ -32,6 +32,24 @@ export async function updateTicketStatus(id: string, status: string) {
   return { success: true };
 }
 
+export async function deleteTicket(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("tickets").delete().eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/maintenance");
+  return { success: true };
+}
+
+export async function deleteContract(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("maintenance_contracts").delete().eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/maintenance");
+  return { success: true };
+}
+
 export async function addTicketComment(ticketId: string, content: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

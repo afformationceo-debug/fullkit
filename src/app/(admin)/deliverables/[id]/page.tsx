@@ -10,6 +10,7 @@ import {
   Tag,
   FileText,
 } from "lucide-react";
+import { DeliverableDelete } from "./deliverable-delete";
 
 const typeLabels: Record<string, string> = {
   design: "디자인",
@@ -143,6 +144,11 @@ export default async function DeliverableDetailPage({ params }: DeliverableDetai
                 </div>
               )}
             </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <DeliverableDelete deliverableId={id} />
           </div>
         </div>
       </div>
