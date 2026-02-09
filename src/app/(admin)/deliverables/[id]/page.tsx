@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Calendar,
@@ -9,6 +10,7 @@ import {
   Package,
   Tag,
   FileText,
+  Pencil,
 } from "lucide-react";
 import { DeliverableDelete } from "./deliverable-delete";
 
@@ -72,6 +74,9 @@ export default async function DeliverableDetailPage({ params }: DeliverableDetai
             </Badge>
           </div>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/deliverables/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

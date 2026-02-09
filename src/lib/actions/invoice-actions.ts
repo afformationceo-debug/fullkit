@@ -52,6 +52,16 @@ export async function createInvoice(formData: {
   return { success: true, invoiceId: invoice.id };
 }
 
+export async function updateInvoice(id: string, data: Record<string, unknown>) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("invoices").update(data).eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/accounting");
+  revalidatePath(`/accounting/${id}`);
+  return { success: true };
+}
+
 export async function updateInvoiceStatus(id: string, status: string) {
   const supabase = await createClient();
 

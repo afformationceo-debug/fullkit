@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Building2,
@@ -11,6 +12,7 @@ import {
   ShieldCheck,
   Ticket,
   FileText,
+  Pencil,
 } from "lucide-react";
 import { ContractDelete } from "./contract-delete";
 
@@ -89,6 +91,9 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
           </div>
           <p className="text-sm text-muted-foreground mt-1 font-mono">{contract.contract_number as string}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/maintenance/contracts/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

@@ -17,6 +17,26 @@ export async function createTicket(formData: {
   return { success: true };
 }
 
+export async function updateTicket(id: string, data: Record<string, unknown>) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("tickets").update(data).eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/maintenance");
+  revalidatePath(`/maintenance/tickets/${id}`);
+  return { success: true };
+}
+
+export async function updateContract(id: string, data: Record<string, unknown>) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("maintenance_contracts").update(data).eq("id", id);
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath("/maintenance");
+  revalidatePath(`/maintenance/contracts/${id}`);
+  return { success: true };
+}
+
 export async function updateTicketStatus(id: string, status: string) {
   const supabase = await createClient();
 

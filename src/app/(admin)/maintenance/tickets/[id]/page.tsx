@@ -2,12 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   Calendar,
   AlertTriangle,
   ShieldCheck,
   MessageSquare,
+  Pencil,
 } from "lucide-react";
 import { TicketStatusActions } from "./ticket-status-actions";
 import { TicketComments } from "./ticket-comments";
@@ -105,6 +107,9 @@ export default async function TicketDetailPage({ params }: TicketDetailPageProps
           </div>
           <p className="text-sm text-muted-foreground mt-1 font-mono">{ticket.ticket_number as string}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/maintenance/tickets/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
