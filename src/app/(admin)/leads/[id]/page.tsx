@@ -13,9 +13,11 @@ import {
   DollarSign,
   FileText,
   MessageSquare,
+  Pencil,
 } from "lucide-react";
 import { LeadStatusActions } from "./lead-status-actions";
 import { LeadNotes } from "./lead-notes";
+import { LeadDelete } from "./lead-delete";
 
 const statusLabels: Record<string, string> = {
   new: "신규",
@@ -123,6 +125,9 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           </div>
           <p className="text-sm text-muted-foreground mt-1 font-mono">{lead.lead_number}</p>
         </div>
+        <Button asChild variant="outline" size="sm">
+          <Link href={`/leads/${id}/edit`}><Pencil size={14} className="mr-1.5" /> 수정</Link>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -176,6 +181,11 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
           <div className="rounded-xl border border-border bg-card p-6">
             <h2 className="font-semibold mb-4">상태 관리</h2>
             <LeadStatusActions leadId={id} currentStatus={lead.status} />
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h2 className="font-semibold mb-4">위험 영역</h2>
+            <LeadDelete leadId={id} />
           </div>
         </div>
       </div>
