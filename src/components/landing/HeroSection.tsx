@@ -93,9 +93,9 @@ export function HeroSection() {
         {/* Rotating word + tagline on one line */}
         <motion.div
           variants={fadeInUp}
-          className="mt-6 flex items-center justify-center gap-3"
+          className="mt-4 flex items-center justify-center gap-2 md:gap-3"
         >
-          <div className="relative h-[1.2em] w-[4.5em] overflow-hidden">
+          <div className="relative overflow-hidden text-4xl md:text-6xl lg:text-7xl h-[1.15em] w-[5em]">
             <AnimatePresence mode="wait">
               <motion.span
                 key={rotatingWords[wordIndex]}
@@ -103,13 +103,13 @@ export function HeroSection() {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: -40, opacity: 0 }}
                 transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="absolute inset-0 flex items-center justify-center text-4xl md:text-6xl lg:text-7xl font-bold gradient-text"
+                className="absolute inset-0 flex items-center justify-center font-bold gradient-text"
               >
                 {rotatingWords[wordIndex]}
               </motion.span>
             </AnimatePresence>
           </div>
-          <span className="text-2xl md:text-4xl lg:text-5xl font-bold text-foreground/70">
+          <span className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground/70">
             다 만든다.
           </span>
         </motion.div>
