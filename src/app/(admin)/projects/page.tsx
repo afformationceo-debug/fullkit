@@ -2,7 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FolderKanban, Plus } from "lucide-react";
+import { FolderKanban, Plus, ChevronLeft, ChevronRight } from "lucide-react";
+import { SearchInput } from "@/components/admin/search-input";
 
 export const metadata = { title: "프로젝트 관리 | Full Kit Admin" };
 
@@ -45,29 +46,42 @@ function formatDate(date: string | null) {
 }
 
 interface ProjectsPageProps {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; search?: string; page?: string }>;
 }
 
 export default async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   const params = await searchParams;
   const filterStatus = params.status || "";
+  const search = params.search || "";
+  const page = parseInt(params.page || "1", 10);
+  const perPage = 20;
 
   const supabase = await createClient();
   let projects: Array<Record<string, unknown>> = [];
+  let count = 0;
+  const from = (page - 1) * perPage;
+  const to = from + perPage - 1;
 
   try {
     let query = supabase
       .from("projects")
-      .select("*, clients(company_name)")
-      .order("created_at", { ascending: false });
+      .select("*, clients(company_name)", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
     if (filterStatus) {
       query = query.eq("status", filterStatus);
     }
+    if (search) {
+      query = query.or(`title.ilike.%${search}%,project_number.ilike.%${search}%`);
+    }
 
-    const { data } = await query;
+    const { data, count: totalCount } = await query;
     projects = data || [];
+    count = totalCount || 0;
   } catch {}
+
+  const totalPages = Math.ceil(count / perPage);
 
   const allStatuses = Object.keys(statusLabels);
 
@@ -83,7 +97,10 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         </Button>
       </div>
 
-      {/* Status filter buttons */}
+      {/* Search + Status filter */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        <SearchInput placeholder="프로젝트 검색..." defaultValue={search} />
+      </div>
       <div className="flex flex-wrap gap-2 mb-6">
         <Link href="/projects">
           <Badge
@@ -117,62 +134,82 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border bg-muted/30">
-                  <th className="text-left p-4 font-medium text-muted-foreground">번호</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">프로젝트명</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">거래처</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">서비스</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">상태</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">시작일</th>
-                  <th className="text-left p-4 font-medium text-muted-foreground">종료일</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {projects.map((project) => {
-                  const client = project.clients as { company_name: string } | null;
-                  return (
-                    <tr key={project.id as string} className="hover:bg-accent/30 transition-colors">
-                      <td className="p-4">
-                        <Link href={`/projects/${project.id}`} className="text-xs font-mono text-brand hover:underline">
-                          {project.project_number as string}
-                        </Link>
-                      </td>
-                      <td className="p-4 font-medium">
-                        <Link href={`/projects/${project.id}`} className="hover:underline">
-                          {project.title as string}
-                        </Link>
-                      </td>
-                      <td className="p-4 text-muted-foreground">
-                        {client?.company_name || "-"}
-                      </td>
-                      <td className="p-4">
-                        <Badge variant="outline" className="text-xs">
-                          {serviceLabels[(project.service_type as string)] || (project.service_type as string)}
-                        </Badge>
-                      </td>
-                      <td className="p-4">
-                        <Badge
-                          variant="secondary"
-                          className={`text-xs ${statusColors[(project.status as string)] || ""}`}
-                        >
-                          {statusLabels[(project.status as string)] || (project.status as string)}
-                        </Badge>
-                      </td>
-                      <td className="p-4 text-xs text-muted-foreground whitespace-nowrap">
-                        {formatDate(project.start_date as string | null)}
-                      </td>
-                      <td className="p-4 text-xs text-muted-foreground whitespace-nowrap">
-                        {formatDate(project.end_date as string | null)}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th className="text-left p-4 font-medium text-muted-foreground">번호</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">프로젝트명</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">거래처</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">서비스</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">상태</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">시작일</th>
+                    <th className="text-left p-4 font-medium text-muted-foreground">종료일</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {projects.map((project) => {
+                    const client = project.clients as { company_name: string } | null;
+                    return (
+                      <tr key={project.id as string} className="hover:bg-accent/30 transition-colors">
+                        <td className="p-4">
+                          <Link href={`/projects/${project.id}`} className="text-xs font-mono text-brand hover:underline">
+                            {project.project_number as string}
+                          </Link>
+                        </td>
+                        <td className="p-4 font-medium">
+                          <Link href={`/projects/${project.id}`} className="hover:underline">
+                            {project.title as string}
+                          </Link>
+                        </td>
+                        <td className="p-4 text-muted-foreground">
+                          {client?.company_name || "-"}
+                        </td>
+                        <td className="p-4">
+                          <Badge variant="outline" className="text-xs">
+                            {serviceLabels[(project.service_type as string)] || (project.service_type as string)}
+                          </Badge>
+                        </td>
+                        <td className="p-4">
+                          <Badge
+                            variant="secondary"
+                            className={`text-xs ${statusColors[(project.status as string)] || ""}`}
+                          >
+                            {statusLabels[(project.status as string)] || (project.status as string)}
+                          </Badge>
+                        </td>
+                        <td className="p-4 text-xs text-muted-foreground whitespace-nowrap">
+                          {formatDate(project.start_date as string | null)}
+                        </td>
+                        <td className="p-4 text-xs text-muted-foreground whitespace-nowrap">
+                          {formatDate(project.end_date as string | null)}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between p-4 border-t border-border">
+                <span className="text-xs text-muted-foreground">총 {count}건 중 {from + 1}-{Math.min(to + 1, count)}건</span>
+                <div className="flex items-center gap-1">
+                  {page > 1 && (
+                    <Link href={`/projects?page=${page - 1}${filterStatus ? `&status=${filterStatus}` : ""}${search ? `&search=${search}` : ""}`}>
+                      <Button variant="ghost" size="sm"><ChevronLeft size={14} /></Button>
+                    </Link>
+                  )}
+                  <span className="text-sm px-2">{page} / {totalPages}</span>
+                  {page < totalPages && (
+                    <Link href={`/projects?page=${page + 1}${filterStatus ? `&status=${filterStatus}` : ""}${search ? `&search=${search}` : ""}`}>
+                      <Button variant="ghost" size="sm"><ChevronRight size={14} /></Button>
+                    </Link>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
